@@ -3,12 +3,14 @@ import { ref, computed } from "vue";
 
 const _todo_text = ref("");
 const _todo_list = ref([]);
+
 const _pending = computed(() => {
   return _todo_list.value.filter((item) => !item.checked);
 });
 const _done = computed(() => {
   return _todo_list.value.filter((item) => item.checked);
 });
+
 const clearToDo = () => {
   _todo_text.value = "";
 };
@@ -50,7 +52,38 @@ const addToDo = () => {
         <i class="fa-solid fa-plus"></i>
       </button>
     </div>
+
+    <div class="w3-padding w3-blue">Pending ({{ _pending.length }})</div>
+    <div class="w3-padding" v-for="todo in _pending" :key="todo.id">
+      <label>
+        <input type="checkbox" v-model="todo.checked" />
+        <span class="w3-margin-left">
+          {{ todo.text }}
+        </span>
+      </label>
+    </div>
+    <div class="w3-padding" v-show="_pending.length == 0">No tasks</div>
+
+    <div class="w3-padding w3-blue">Completed ({{ _done.length }})</div>
+    <div class="w3-padding" v-for="todo in _done" :key="todo.id">
+      <label>
+        <input type="checkbox" v-model="todo.checked" />
+        <span class="w3-margin-left">{{ todo.text }}</span>
+      </label>
+    </div>
+
+    <div class="w3-padding" v-show="_done.length == 0">No tasks</div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.todo-container {
+  max-width: 100%;
+  min-width: 30rem;
+}
+
+label {
+  display: flex;
+  cursor: pointer;
+}
+</style>
